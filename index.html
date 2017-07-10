@@ -1,0 +1,317 @@
+<!Doctype html>
+<html>
+  <head>
+    <title>Socket Chat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+	  <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-grid.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-reboot.min.css"/>
+
+    <script src="/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+	<script src="/js/tether.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+	<style>
+		.nav-tabs {
+			margin-bottom: 15px;
+		}
+		.sign-with {
+			margin-top: 25px;
+			padding: 20px;
+		}
+		div#OR {
+			height: 30px;
+			width: 30px;
+			border: 1px solid #C2C2C2;
+			border-radius: 50%;
+			font-weight: bold;
+			line-height: 28px;
+			text-align: center;
+			font-size: 12px;
+			float: right;
+			position: absolute;
+			right: -16px;
+			top: 40%;
+			z-index: 1;
+			background: #DFDFDF;
+		}
+	</style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1 class="display-3">Socket Chat</h1>
+        <p class="lead">This is a simple Chat Server.</p>
+        <hr class="my-4">
+        <p>You can do group chat and individual chat as you like. Happy chatting ;-)</p>
+        <p class="lead">
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Enter</button>
+        </p>
+      </div>
+    </div>
+
+    <!--Modal Starts Here-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Login / Registration</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8" style="border-right: 1px dotted #C2C2C2;padding-right: 30px;">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#Login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#Registration" role="tab" data-toggle="tab">Registration</a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade-in active" id="Login">
+                                <!--<form role="form" class="form-horizontal" id="loginForm" method="post" action="http://localhost:3000/login">-->
+								<form role="form" class="form-horizontal" id="loginForm" method="post" action="https://socket-chat-abhilash.herokuapp.com/login">
+                                <div class="form-group">
+                                    <label for="loginUsername" class="col-sm-2 control-label">Username</label>
+                                    <div class="alert alert-danger" id="alertLoginError" style="display:none"><strong>Error! </strong> Username required.</div>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="loginUsername" name="username" placeholder="Username" />
+                                        <div class="alert alert-danger" id="alertUsername" style="display:none"><strong>Error! </strong> Username required.</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPassword" class="col-sm-2 control-label">
+                                        Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" />
+                                        <div class="alert alert-danger" id="alertPassword" style="display:none"><strong>Error! </strong> Password required.</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <button type="submit" id="btnLogin" class="btn btn-primary btn-md">Login</button>
+                                        <a href="javascript:;">Forgot your password?</a>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" role="tabpanel" id="Registration">
+                                <form role="form" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="regUsername" class="col-sm-2 control-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="regUsername" placeholder="Enter Username" />
+										                    <p id="txtAvailability"></p>
+										                    <div class="alert alert-danger" id="alert" style="display:none"><strong>Error! </strong> Username required.</div>
+										                    <button class="btn btn-primary btn-md" id="btnCheckAvailability">Check Availability</button>
+										                    <progress id="progress" style="display:none"></progress>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="regPassword" class="col-sm-2 control-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="regPassword" placeholder="Enter Password" />
+                                        <div class="alert alert-danger" id="alertPasswordRequired" style="display:none"><strong>Error! </strong> Password required.</div>
+                                    </div>
+                                </div>
+								<div class="form-group">
+                                    <label for="regConfirmPassword" class="col-sm-4 control-label">Confirm Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="regConfirmPassword" placeholder="Re-Enter Password" />
+                                        <div class="alert alert-danger" id="alertPasswordsNotMatch" style="display:none"><strong>Error! </strong> Passwords do not match.</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2"></div>
+									<div class="col-sm-10">
+                                        <button type="button" id="btnSignUp" class="btn btn-primary btn-md">SignUp</button>
+                                        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="OR" class="hidden-xs">OR</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row text-center sign-with">
+                            <div class="col-md-12">
+                                <h3>Sign in with</h3>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="btn-group btn-group-justified">
+                                    <a href="#" class="btn btn-primary">Facebook</a> <a href="#" class="btn btn-danger">Google</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--Modal Ends Here-->
+
+    <script>
+    var available=false;
+      $('.alert .close').on('click',function(e){
+        $(this).parent().hide();
+      });
+
+      function trim(value) {
+        return value.replace(/^\s+|\s+$/g,"");
+      }
+      document.getElementById("regUsername").addEventListener("input",function(evt){
+        document.getElementById("alert").style.display="none";
+		    document.getElementById("txtAvailability").innerHTML="";
+        available=false;
+      });
+      document.getElementById("btnCheckAvailability").addEventListener("click",function(){
+        if(trim(document.getElementById("regUsername").value)==""){
+          document.getElementById("alert").style.display="block";
+          $('#alert').show();
+          document.getElementById("regUsername").focus();
+        }else{
+          document.getElementById("progress").style.display="block";
+          var id=document.getElementById('regUsername').value;
+          var xhttp=new XMLHttpRequest();
+          xhttp.onreadystatechange=function(){
+            if(this.readyState==4&&this.status==200){
+              document.getElementById("progress").style.display="none";
+              var data=JSON.parse(xhttp.responseText);
+              if(data.success){
+                console.log('Success');
+                if(data.data.length!=0){
+                  console.log('Data not empty: '+data.data.length);
+                  for(var i=0;i<data.data.length;i++){
+					               console.log('ClientID:'+data.data[i].clientId+' CustomId:'+data.data[i].customId);
+                         if(data.data[i].customId.localeCompare(id)==0){
+                           var txtAvailability=document.getElementById("txtAvailability");
+                           txtAvailability.style.color="#f00";
+                           txtAvailability.innerHTML="This username is not available. Please try something else.";
+                           available=false;
+                           return;
+                         }
+                  }
+                  var txtAvailability=document.getElementById("txtAvailability");
+                  txtAvailability.style.color="#0b0";
+                  txtAvailability.innerHTML="Username available. You can continue.";
+                  document.cookie="customId="+id;
+                  available=true;
+                }else{
+                  console.log('Data empty');
+                  var txtAvailability=document.getElementById("txtAvailability");
+                  txtAvailability.style.color="#0b0";
+                  txtAvailability.innerHTML="Username available. You can continue.";
+                  document.cookie="customId="+id;
+                  available=true;
+                }
+              }else{
+                console.log('Failure');
+                var txtAvailability=document.getElementById("txtAvailability");
+                txtAvailability.style.color="#f00";
+                txtAvailability.innerHTML="Something went wrong. Please try again.";
+              }
+            }
+          };
+
+          //xhttp.open("GET","http://localhost:3000/users",true);
+		  xhttp.open("GET","https://socket-chat-abhilash.herokuapp.com/users",true);
+          xhttp.send();
+        }
+      });
+
+      document.getElementById("btnSignUp").addEventListener("click",function(){
+        if(available){
+          if(trim(document.getElementById("regPassword").value).localeCompare("")==0){
+            console.log("Enter Password");
+            document.getElementById("alertPasswordRequired").style.display="block";
+          }else{
+            if(document.getElementById("regPassword").value.localeCompare(document.getElementById("regConfirmPassword").value)==0){
+              document.getElementById("btnSignUp").disabled=true;
+              document.getElementById("btnCheckAvailability").disabled=true;
+              proceed();
+            }else{
+              document.getElementById("alertPasswordsNotMatch").style.display="block";
+            }
+          }
+        }
+      });
+
+      function proceed () {
+        var form = document.createElement('form');
+        form.setAttribute('method', 'post');
+        //form.setAttribute('action', 'http://localhost:3000/signup');
+		form.setAttribute('action','https://socket-chat-abhilash.herokuapp.com/signup');
+        form.style.display = 'hidden';
+        form.setAttribute('id',"form");
+        document.body.appendChild(form)
+        var input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", "username");
+        input.setAttribute("value",document.getElementById("regUsername").value);
+
+        form.appendChild(input);
+
+        var input2 = document.createElement("input");
+        input2.setAttribute("type", "hidden");
+        input2.setAttribute("name", "password");
+        input2.setAttribute("value", document.getElementById("regPassword").value);
+
+        form.appendChild(input2);
+        form.submit();
+      }
+
+      document.getElementById("regPassword").addEventListener("input",function(){
+        document.getElementById("alertPasswordRequired").style.display="none";
+      });
+
+      document.getElementById("regConfirmPassword").addEventListener("input",function(){
+        document.getElementById("alertPasswordsNotMatch").style.display="none";
+      });
+
+      $(".modal").on("hidden.bs.modal",function(){
+        document.getElementById("regUsername").value="";
+        document.getElementById("txtAvailability").innerHTML="";
+      });
+
+      /*document.getElementById("btnLogin").addEventListener("click",function(){
+        if(trim(document.getElementById("loginUsername").value).localeCompare("")==0){
+          document.getElementById("alertUsername").style.display="block";
+        }else{
+          if(trim(document.getElementById("loginPassword").value).localeCompare("")==0){
+            document.getElementById("alertPassword").style.display="block";
+          }else{
+              login();
+          }
+        }
+      });
+
+      function login(){
+        var xhttp=new XMLHttpRequest();
+        var params="username="+document.getElementById("loginUsername").value+"&password="+document.getElementById("loginPassword").value;
+        xhttp.onreadystatechange=new function(){
+          console.log('status'+xhttp.status+' readyState:'+xhttp.readyState);
+          if(xhttp.readyState==4&&xhttp.status==200){
+            var data=JSON.parse(xhttp.responseText);
+            console.log(' '+data.success);
+          }
+        };
+        xhttp.open("post","http://localhost:3000/login",true);
+        xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhttp.send(new FormData(document.getElementById("loginForm")));
+      }*/
+
+      document.getElementById("loginUsername").addEventListener("input",function(){
+        document.getElementById("alertUsername").style.display="none";
+      });
+
+      document.getElementById("loginPassword").addEventListener("input",function(){
+        document.getElementById("alertPassword").style.display="none";
+      });
+    </script>
+  </body>
+</html>

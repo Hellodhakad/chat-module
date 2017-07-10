@@ -1,0 +1,19 @@
+{
+  "name": "socket-chat",
+  "version": "1.0.0",
+  "description": "Simple socket chat application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "4.13.3",
+    "socket.io": "^2.0.2",
+    "mongoose": "^4.9.5",
+    "bluebird": "^3.5.0",
+    "cookie-parser": "^1.4.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
